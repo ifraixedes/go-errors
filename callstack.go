@@ -7,19 +7,21 @@ import (
 
 type callStack []uintptr
 
-// newCallStack creates a callStack of calls skipping the call to runtime.Callers
-// and newCallStack
+// newCallStack creates a callStack of calls skipping the call to
+// runtime.Callers, newCallStack and the caller of newCallStack.
+// The newCallStack is skipped because it's meant to be used by the errors
+// consturctors and they shouldn't appear in the error value call stack.
 func newCallStack() callStack {
 	var (
 		depth = 20
 		pcs   = make([]uintptr, depth)
-		l     = runtime.Callers(2, pcs)
+		l     = runtime.Callers(3, pcs)
 	)
 
 	for l == depth {
 		depth += 10
 		pcs = make([]uintptr, depth)
-		l = runtime.Callers(2, pcs)
+		l = runtime.Callers(3, pcs)
 	}
 
 	pcs = pcs[:l]

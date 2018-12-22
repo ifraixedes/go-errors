@@ -6,26 +6,12 @@ import (
 	"math/rand"
 	"testing"
 
-	"github.com/gofrs/uuid"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 )
 
 func TestDerror_Format(t *testing.T) {
 	var f2 = func() error {
-		var id, e = uuid.NewV4()
-		require.NoError(t, e)
-
-		var (
-			err = derror{
-				c:   testCode(true),
-				mds: mDatas{{K: "var1", V: "a string"}, {K: "var2", V: 10}},
-				id:  id,
-				cs:  newCallStack(),
-			}
-		)
-
-		return err
+		return New(testCode(true), MD{K: "var1", V: "a string"}, MD{K: "var2", V: 10})
 	}
 
 	var f1 = func() error {
@@ -104,27 +90,6 @@ func TestDerror_Format(t *testing.T) {
 }
 
 func TestDerror_Error(t *testing.T) {
-	var id, e = uuid.NewV4()
-	require.NoError(t, e)
-
-	var err = derror{
-		c:   testCode(true),
-		mds: mDatas{{K: "var1", V: "a string"}, {K: "var2", V: 10}},
-		id:  id,
-		cs:  newCallStack(),
-	}
-
+	var err = New(testCode(true), MD{K: "var1", V: "a string"}, MD{K: "var2", V: 10})
 	assert.Equal(t, fmt.Sprintf("%s", err), err.Error())
-}
-
-// testCode is a silly example of a Code implementation with the only purpose of
-// testing derror type methods.
-type testCode bool
-
-func (testCode) String() string {
-	return "TestCode"
-}
-
-func (testCode) Message() string {
-	return "an test code error has happened"
 }

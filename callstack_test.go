@@ -11,10 +11,10 @@ import (
 
 func TestCallStack_Format(t *testing.T) {
 	var (
-		ptName = t.Name()
-		cstk   callStack
-		f2     = func() { cstk = newCallStack() }
-		f1     = func() { f2() }
+		ptName    = t.Name()
+		cstk      callStack
+		skippedFn = func() { cstk = newCallStack() }
+		f1        = func() { skippedFn() }
 	)
 	f1()
 
@@ -22,18 +22,15 @@ func TestCallStack_Format(t *testing.T) {
 		var s = fmt.Sprintf("%v", cstk)
 		var sls = strings.Split(s, "\n")
 
-		assert.Contains(t, sls[0], fmt.Sprintf("errors.%s.func1", ptName))
-		assert.Contains(t, sls[1], "errors/callstack_test.go:16")
-		assert.Contains(t, sls[2], fmt.Sprintf("errors.%s.func2", ptName))
-		assert.Contains(t, sls[3], "errors/callstack_test.go:17")
+		assert.Contains(t, sls[0], fmt.Sprintf("errors.%s.func2", ptName))
+		assert.Contains(t, sls[1], "errors/callstack_test.go:17")
 	})
 
 	t.Run("'v' verb and '-' flags", func(t *testing.T) {
 		var s = fmt.Sprintf("%-v", cstk)
 		var sls = strings.Split(s, "\n")
 
-		assert.Contains(t, sls[0], fmt.Sprintf("errors.%s.func1", ptName))
-		assert.Contains(t, sls[1], fmt.Sprintf("errors.%s.func2", ptName))
+		assert.Contains(t, sls[0], fmt.Sprintf("errors.%s.func2", ptName))
 	})
 
 	t.Run("any other verb", func(t *testing.T) {
