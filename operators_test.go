@@ -29,6 +29,32 @@ func TestIs(t *testing.T) {
 	})
 }
 
+func TestGetCode(t *testing.T) {
+	t.Run("created by this package", func(t *testing.T) {
+		var (
+			expc  = testCode(true)
+			err   = New(expc)
+			c, ok = GetCode(err)
+		)
+
+		assert.Equal(t, expc, c)
+		assert.True(t, ok)
+	})
+
+	t.Run("created by other package", func(t *testing.T) {
+		var (
+			err   = errors.New("some error")
+			_, ok = GetCode(err)
+		)
+
+		assert.False(t, ok)
+	})
+}
+
+		assert.False(t, ok)
+	})
+}
+
 // similarTestCode is a silly example of a Code implementation with the only
 // purpose of testing the Is method
 type similarTestCode bool

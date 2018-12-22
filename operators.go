@@ -12,3 +12,15 @@ func Is(err error, c Code) bool {
 
 	return derr.c.String() == c.String() && derr.c.Message() == c.Message()
 }
+
+// GetCode returns the Code of the err and true; if err isn't created by any of
+// the constructors of this package, false is returned and Code value can be
+// ignored.
+func GetCode(err error) (Code, bool) {
+	var derr, ok = err.(derror)
+	if !ok {
+		return nil, false
+	}
+
+	return derr.c, true
+}
