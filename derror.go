@@ -41,6 +41,10 @@ func (err derror) Format(state fmt.State, verb rune) {
 		_, _ = fmt.Fprintf(state, "\n\twrapped error: %+v", err.werr)
 	}
 
+	if len(err.cs) == 0 {
+		return
+	}
+
 	if state.Flag('-') {
 		_, _ = fmt.Fprintf(state, "\n\tcall stack (compacted):\n%-v", err.cs)
 	} else {

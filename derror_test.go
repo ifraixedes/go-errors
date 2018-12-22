@@ -66,9 +66,9 @@ func TestDerror_Format(t *testing.T) {
 	})
 
 	t.Run("code, message, id, metadata, wrapped error and call stack (%+v)", func(t *testing.T) {
-		var e = derr
-		e.werr = errors.New("some external error")
 		var (
+			err = Wrap(errors.New("some external error"), testCode(true), MD{K: "var1", V: "a string"})
+			e   = err.(derror)
 			s   = fmt.Sprintf("%+v", e)
 			exp = fmt.Sprintf("%s: %s\n\tid: %s\n\tmetadata: %v\n\twrapped error: %+v\n\tcall stack:\n%+v",
 				e.c.String(), e.c.Message(), e.id, e.mds, e.werr, e.cs,
