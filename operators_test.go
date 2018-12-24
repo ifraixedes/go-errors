@@ -4,6 +4,7 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/gofrs/uuid"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -50,6 +51,23 @@ func TestGetCode(t *testing.T) {
 		assert.False(t, ok)
 	})
 }
+
+func TestGetID(t *testing.T) {
+	t.Run("created by this package", func(t *testing.T) {
+		var (
+			err    = New(testCode(true))
+			id, ok = GetID(err)
+		)
+
+		assert.NotEqual(t, uuid.UUID{}, id)
+		assert.True(t, ok)
+	})
+
+	t.Run("created by other package", func(t *testing.T) {
+		var (
+			err   = errors.New("some error")
+			_, ok = GetID(err)
+		)
 
 		assert.False(t, ok)
 	})

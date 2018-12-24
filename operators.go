@@ -1,5 +1,7 @@
 package errors
 
+import "github.com/gofrs/uuid"
+
 // Is return true if err is an error value created by one of the constructor
 // of this package and c has the same string representation (value returned by
 // the String method) and the same message (value returned by the  Message
@@ -23,4 +25,15 @@ func GetCode(err error) (Code, bool) {
 	}
 
 	return derr.c, true
+}
+
+// GetID returns the ID of the err and true; if err isn't created by any of the
+// constructors of this package, false is returned and ID value can be ignored.
+func GetID(err error) (uuid.UUID, bool) {
+	var derr, ok = err.(derror)
+	if !ok {
+		return uuid.UUID{}, false
+	}
+
+	return derr.id, true
 }
