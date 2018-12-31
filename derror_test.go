@@ -14,6 +14,7 @@ func TestDerror_Format(t *testing.T) {
 		return New(testCode(true), MD{K: "var1", V: "a string"}, MD{K: "var2", V: 10})
 	}
 
+	// nolint:gocritic
 	var f1 = func() error {
 		return f2()
 	}
