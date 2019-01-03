@@ -1,5 +1,8 @@
 # Go Errors
 
+[![Coverage Status](https://coveralls.io/repos/github/ifraixedes/go-errors/badge.svg?branch=master)](https://coveralls.io/github/ifraixedes/go-errors?branch=master)
+[![Build Status](https://travis-ci.com/ifraixedes/go-errors.svg?branch=master)](https://travis-ci.com/ifraixedes/go-errors)
+[![Go Report Card](https://goreportcard.com/badge/go.fraixed.es/errors)](https://goreportcard.com/report/go.fraixed.es/errors)
 [![GoDoc](https://godoc.org/go.fraixed.es/errors?status.svg)](https://godoc.org/go.fraixed.es/errors)
 
 This package provides a simple API for creating and handling errors which are identified by codes.
