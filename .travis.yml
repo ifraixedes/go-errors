@@ -1,0 +1,35 @@
+go_import_path: go.fraixed.es/errors
+language: go
+
+matrix:
+  include:
+    - go: "1.11.x"
+      env: GO111MODULE=on LINT=true
+    - go: "1.10.x"
+    - go: "1.9.x"
+    - go: "1.8.x"
+    - go: tip
+      env: GO111MODULE=on
+  allow_failures:
+    - go: tip
+      env: GO111MODULE=on
+
+before_install:
+  # setup some env vars
+  - GO_FILES=$(find . -iname '*.go' | grep -v /vendor/)  # All the .go files, excluding vendor/
+  - PKGS=$(go list ./... | grep -v /vendor/)             # All the import paths, excluding vendor/
+
+  # Install CI tools
+  - make .go-tools-install-ci
+
+  # Install goveralls, Go integration for Coveralls.io.
+  - go get -u github.com/mattn/goveralls
+
+script:
+  - test -z $(gofmt -s -l $GO_FILES)  # Fail if a .go file hasn't been formatted with gofmt
+  - if [ "$LINT" = true ]; then make lint; fi
+  - go test -v -covermode=count -coverprofile=profile.cov $PKGS
+  - goveralls -coverprofile=profile.cov -service=travis-ci
+
+notifications:
+  email: false
