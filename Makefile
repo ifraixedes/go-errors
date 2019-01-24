@@ -8,18 +8,26 @@ endef
 
 export HELP_MSG
 
-
 .PHONY: help
 help: ## Show this help
 	@echo "$$HELP_MSG"
 	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/:.*##/:##/' | column -t -s '##'
 
-.PHONY: go-tools-install
-go-tools-install: .gti-golangci-lint ## Install Go tools
-
 .PHONY: lint
 lint: ## Lint the code
 	@$(GOLANGCI_LINT_BIN) run --enable-all --exclude-use-default=false
+
+.PHONY: test
+test: ## Execute the tests
+	@go test $(TARGS) ./...
+
+.PHONY: ci
+ci: ## Simulate the same checks that the CI runs
+	@make lint
+	@make test
+
+.PHONY: go-tools-install
+go-tools-install: .gti-golangci-lint ## Install Go tools
 
 .PHONY: .go-tools-install-ci
 .go-tools-install-ci: .gti-golangci-lint
