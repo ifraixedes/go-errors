@@ -105,6 +105,12 @@ however it only intentionally allows to get a part of it, because the
 information destined for operations is only thought to be exposed through
 systems for such purpose, for example logging.
 
+## Usage Examples
+
+1. Comment about the functions to generated formatted metadata.
+1. Comment about the granularity of the error, regarding that frontends should know the rules and have filter the inputs accordingly for offering to the user a better error reporting. For example if a value is invalid because it doesn't exists in the DB but also because it's empty, the error code could be the same and if the frontend wants to distinguish, then it can filter for empty values and return a more specific error to the user and leave the case that it cannot check (e.g. the DB one) to the domain function.
+1. Think if the metadata should be exposed or not through a function with some minor filtering, using namespaces (e.g. `pub/arg:name`).
+
 
 ## License
 
